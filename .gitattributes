@@ -1,0 +1,3 @@
+# Package files are zipped and hashed byte for byte: keep LF on every checkout, also with core.autocrlf=true.
+* text=auto eol=lf
+*.zip binary
