@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>act packages</title>
+<style>
+body{font-family:sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;line-height:1.5}
+.pkg{border:1px solid #ccc;border-radius:6px;padding:.5rem 1rem;margin:1rem 0}
+.pkg.is-red{border-color:#b00020}
+.red{color:#b00020;font-weight:bold}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.2rem 1rem}dt{font-weight:bold}dd{margin:0}
+small{color:#555}
+</style>
+</head>
+<body>
+<h1>act packages</h1>
+<p>Packages for the agentic coding template. Fetch one with <code>packages.py fetch &lt;id&gt;</code>, then read the plan from <code>packages.py add &lt;id&gt;</code> before you say yes.</p>
+<section class="pkg" id="example"><h2>example <small>1.0.0</small></h2><p>A small package to learn the format from: one rule (`R-example-greeting`), one new skill (`example-hello`) and an extension of the template&#x27;s `reviewer` role. It contains no code.</p><dl><dt>Tools</dt><dd>claude-code</dd><dt>License</dt><dd>MIT</dd><dt>Contains code</dt><dd>no</dd><dt>Requires template</dt><dd>&gt;=0.1.0</dd></dl><p><code>python .act/scripts/packages.py fetch example</code></p></section>
+</body>
+</html>
