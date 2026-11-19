@@ -33,7 +33,8 @@ bytes on every build of the same sources.
 
 ## Trust
 
-Zips are signed by the template author; the project checks the signature against `.act/package-signers`. An unsigned
+Zips are signed by the template author; the project checks the signature against `.act/package-signers` and, if it
+exists, its own `docs/ai/local/package-signers` (for a key the project trusts on its own). An unsigned
 package is only admitted with `packages-unverified: scan` or `allow` in `docs/ai/config.md`, and a signature that does
 not verify is refused in every mode. A package's code (`install.py`, check modules) is trusted code once installed:
 read the plan and, for unsigned packages, the scan findings before you say yes.
@@ -53,8 +54,21 @@ not committed; they are published as release assets and as the Pages site.
 
 ## Signing
 
-`build.py` never signs. After a build, the maintainers sign each zip with the template maintenance repository's
-`scripts/sign-package.py` and publish the zips, the `.sig` files and `index.json` as release assets.
+`build.py` never signs. After a build, the maintainers sign each zip with `ssh-keygen -Y sign -n act-package` (the form
+the template checks, `.act/formats/package.md`) and publish the zips, the `.sig` files and `index.json` as release
+assets.
+
+## Releases
+
+Projects fetch from `https://github.com/wrufeger/act-packages/releases/latest/download/`, which reaches only the
+assets of the release GitHub marks as latest. So every release:
+
+- is a full release, never a draft or pre-release;
+- carries `index.json` and the zip and `.sig` of every package and version that `index.json` lists, not only the ones
+  that changed;
+- is tagged with its date, `YYYY-MM-DD`, and `YYYY-MM-DD.2` and so on for a second release on the same day.
+
+The Pages site is the content of `site/` on the branch `gh-pages` (root folder), replaced on every release.
 
 ## Contributing
 

@@ -41,7 +41,11 @@ def read_package(folder: Path) -> Dict[str, object]:
     path = folder / "package.md"
     if not path.is_file():
         raise BuildError(f"{folder.name}: no package.md")
-    lines = path.read_text(encoding="utf-8").replace("\r\n", "\n").split("\n")
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as error:
+        raise BuildError(f"{folder.name}: package.md is not valid UTF-8 ({error.reason} at byte {error.start})") from error
+    lines = text.replace("\r\n", "\n").split("\n")
     if not lines or lines[0].strip() != "---":
         raise BuildError(f"{folder.name}: package.md does not start with a --- header")
     header: Dict[str, str] = {}
@@ -132,10 +136,17 @@ def load_red() -> Dict[str, str]:
     path = ROOT / "maintainers" / "red.json"
     if not path.is_file():
         return {}
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict) or not all(isinstance(k, str) and isinstance(v, str) and v.strip()
-                                             for k, v in data.items()):
-        raise BuildError("maintainers/red.json must be an object of {\"<id>\": \"<reason>\"}, no reason empty")
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as error:
+        raise BuildError(f"maintainers/red.json: {error}") from error
+    if not isinstance(data, dict):
+        raise BuildError(f"maintainers/red.json must be an object of {{\"<id>\": \"<reason>\"}}, "
+                         f"not {type(data).__name__}")
+    for key, value in data.items():
+        if not isinstance(value, str) or not value.strip():
+            raise BuildError(f"maintainers/red.json: the reason for {key!r} must be a non-empty string, "
+                             f"not {value!r}")
     return data
 
 
@@ -216,15 +227,23 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"build: {error}", file=sys.stderr)
         return 1
     dist = ROOT / "dist"
-    dist.mkdir(exist_ok=True)
     index: Dict[str, Dict[str, object]] = {}
-    for folder, info in zip(folders, infos):
-        name = f"{info['id']}-{info['version']}.zip"
-        build_zip(folder, dist / name)
-        index[str(info["id"])] = index_entry(info, name, red)
-        print(f"built dist/{name}")
-    write_text(dist / "index.json", json.dumps({"packages": index}, indent=2, sort_keys=True) + "\n")
-    write_text(ROOT / "site" / "index.html", render_site(infos, red))
+    target = dist
+    try:
+        dist.mkdir(exist_ok=True)
+        for folder, info in zip(folders, infos):
+            name = f"{info['id']}-{info['version']}.zip"
+            target = dist / name
+            build_zip(folder, target)
+            index[str(info["id"])] = index_entry(info, name, red)
+            print(f"built dist/{name}")
+        target = dist / "index.json"
+        write_text(target, json.dumps({"packages": index}, indent=2, sort_keys=True) + "\n")
+        target = ROOT / "site" / "index.html"
+        write_text(target, render_site(infos, red))
+    except OSError as error:
+        print(f"build: cannot write {target}: {error}", file=sys.stderr)
+        return 1
     print(f"wrote dist/index.json and site/index.html ({len(infos)} packages)")
     return 0
 

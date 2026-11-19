@@ -24,7 +24,8 @@ A header between two `---` lines (`id`, `version` as `X.Y.Z`, `requires-template
 `contains-code` as `yes` or `no`; optionally `stack`, a comma list of the stacks the package is for, which the catalogue
 index carries and nothing checks), then sections: `## Contents` (free text), and optionally `## disables`
 (`- R-<area>-<name>`), `## settings` (`- <id>-<key>: <question>`) and `## checks` (`- <check>: block|warn|off`).
-Any other section is refused. The id is lowercase, 2 to 31 characters; `act` and `act-...` are the template's.
+Any other section is refused. The id starts with a letter and holds lowercase letters, digits and hyphens, 2 to 31
+characters (`^[a-z][a-z0-9-]{1,30}$`); `act` and `act-...` are the template's.
 
 ## Names
 
@@ -45,8 +46,15 @@ and say in `## Contents` what they do. `install.md` is the instruction for the a
 
 ## Test it
 
+From the root of a project on the template (the plan needs its `.act/`):
+
 ```
-python .act/scripts/packages.py plan packages/<id>
+python .act/scripts/packages.py plan <path to act-packages>/packages/<id>
+```
+
+From the root of this repository (runs that plan for every package in a throwaway copy of the template):
+
+```
 python tools/build.py --template <path to a template checkout>
 ```
 
