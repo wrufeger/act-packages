@@ -47,6 +47,7 @@ read the plan and, for unsigned packages, the scan findings before you say yes.
 | `docs/creating-a-package.md` | how to write a package |
 | `maintainers/red.json` | hand-kept `{"<id>": "<reason>"}` list of packages the catalogue marks red |
 | `tools/build.py` | builds `dist/<id>-<version>.zip`, `dist/index.json` and `site/index.html` |
+| `tests/` | tests of the package code (`install.py`, check modules): `python -B -m unittest discover -s tests -t .` |
 
 Build: `python tools/build.py [--template <path to a template checkout>]`. With `--template` every package is first
 checked by that template's `packages.py plan`, and a refusal stops the build with the reasons. `dist/` and `site/` are
