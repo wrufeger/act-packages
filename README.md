@@ -3,6 +3,11 @@
 Packages for the agentic coding template ("act"). A package brings rules, coding sets, skills, roles, topics, scripts
 and check modules into a project that runs on the template, without changing the template itself.
 
+- Template: <https://github.com/wrufeger/agentic-coding-template>
+- Packages on the documentation site, English and German: <https://wrufeger.github.io/agentic-coding-template-docs/packages/>
+- Guide to using, creating and submitting packages: <https://wrufeger.github.io/agentic-coding-template-docs/guides/packages/>
+- Package format: <https://wrufeger.github.io/agentic-coding-template-docs/reference/package-format/>
+
 ## Getting a package
 
 In a project on the template, either ask the assistant with the `/act-packages` skill, or run the steps yourself:
@@ -69,9 +74,23 @@ assets of the release GitHub marks as latest. So every release:
   that changed;
 - is tagged with its date, `YYYY-MM-DD`, and `YYYY-MM-DD.2` and so on for a second release on the same day.
 
-The Pages site is the content of `site/` on the branch `gh-pages` (root folder), replaced on every release.
+The Pages site is the content of `site/` on the branch `gh-pages` (root folder), replaced on every release. After
+every release the maintainer regenerates the package pages of the documentation site from the new tag.
 
 ## Contributing
 
-Open a pull request that adds or changes `packages/<id>/`; see `docs/creating-a-package.md`. A package is licensed by
-the `license` field of its `package.md`; the repository itself is MIT (`LICENSE`).
+Everyone may submit a package. Fork the repository, add or change `packages/<id>/` on a branch (raise `version` for a
+change) and open a pull request. The guide tells you how to check it first:
+<https://wrufeger.github.io/agentic-coding-template-docs/guides/packages/>.
+
+- The maintainer merges after a review. A package with code (`contains-code: yes`) brings its own tests and gets a
+  second, deeper review. Scripts in a merged package count as reviewed.
+- Authors do not sign. The maintainer builds, signs and publishes the zip with the next release. Until then you can
+  install your package from its folder in a throwaway project (a folder is unverified, so set `packages-unverified`
+  to `scan` or `allow` there; the default `block` refuses it), or sign it yourself, list your key in
+  `docs/ai/local/package-signers` of your project and publish it from your own source.
+- An id belongs to the first pull request that uses it.
+- Only the maintainer marks a package red. An orphaned package may be marked red or left out of a release, with the
+  reason.
+
+A package is licensed by the `license` field of its `package.md`; the repository itself is MIT (`LICENSE`).

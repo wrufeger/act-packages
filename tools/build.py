@@ -198,6 +198,12 @@ def render_site(packages: List[Dict[str, object]], red: Dict[str, str]) -> str:
         "small{color:#555}\n</style>\n</head>\n<body>\n<h1>act packages</h1>\n"
         "<p>Packages for the agentic coding template. Fetch one with <code>packages.py fetch &lt;id&gt;</code>, "
         "then read the plan from <code>packages.py add &lt;id&gt;</code> before you say yes.</p>\n"
+        "<p>More: <a href=\"https://github.com/wrufeger/agentic-coding-template\">the template</a> · "
+        "<a href=\"https://wrufeger.github.io/agentic-coding-template-docs/packages/\">"
+        "packages on the documentation site</a> · "
+        "<a href=\"https://wrufeger.github.io/agentic-coding-template-docs/guides/packages/\">"
+        "guide: using, creating and submitting packages</a> · "
+        "<a href=\"https://github.com/wrufeger/act-packages\">package repository</a></p>\n"
         f"{body}\n</body>\n</html>\n"
     )
 
