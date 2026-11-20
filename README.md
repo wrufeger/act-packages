@@ -3,6 +3,11 @@
 Packages for the agentic coding template ("act"). A package brings rules, coding sets, skills, roles, topics, scripts
 and check modules into a project that runs on the template, without changing the template itself.
 
+> **Packages from the next template release.** The package layer (`packages.py`, `/act-packages`) is in no release of
+> the template yet: v2.6.0 and older do not have it. It comes with the next release. Until then a project needs the
+> [update channel](https://wrufeger.github.io/agentic-coding-template-docs/getting-started/update/#update-channel)
+> `latest`: set `update-channel: latest` in `docs/ai/config.md` and run `act-update`.
+
 - Template: <https://github.com/wrufeger/agentic-coding-template>
 - Packages on the documentation site, English and German: <https://wrufeger.github.io/agentic-coding-template-docs/packages/>
 - Guide to using, creating and submitting packages: <https://wrufeger.github.io/agentic-coding-template-docs/guides/packages/>
