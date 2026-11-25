@@ -1,6 +1,6 @@
 ---
 id: homenet
-version: 0.1.0
+version: 0.2.0
 requires-template: >=2.6.0
 tools: claude-code
 license: MIT
@@ -22,13 +22,19 @@ neither.
   `R-homenet-rename`, `R-homenet-names`, `R-homenet-exports`, `R-homenet-handoff`; an extension of `R-safe-approval`
   that points to the rights table.
 - Roles: `homenet-reader` (reads only, never scans, cross-checks every write over its own way) and `homenet-writer`
-  (backs up first, never deletes, a write is done only after the reader's cross-check).
-- Skills: `homenet-inventory` (first inventory and doc audit against the live state) and `homenet-add-device`.
+  (backs up first, never deletes, a write is done only after the reader's cross-check); for Home Assistant
+  `homenet-ha-reader` (read tools only, no shell, no SSH, large answers narrowed and entities counted) and
+  `homenet-ha-writer` (fixed order with a checksum lock, a dashboard first on a test view, one domain reloaded instead
+  of a restart, a table of changes returned).
+- Skills: `homenet-inventory` (first inventory and doc audit against the live state), `homenet-add-device` and
+  `homenet-maintenance` (recurring tasks with a status file each; shows what is due, runs only that, writes a dated
+  report, changes nothing on the systems).
 - Topic: `homenet-mcp` (MCP servers and APIs for Home Assistant, network controller, hypervisor, monitoring and NAS,
   with read and write kept apart).
 - Code: `install.py` only reports which tools are there (`ssh`, Python, interpreter traps on Windows); it opens no
-  connection and writes nothing. The check module `homenet_no_scan` refuses port scanners (`nmap`, `masscan`, `zmap`
-  and similar, `nc -z` over more than one port) in shell calls of Claude Code.
+  connection and writes nothing. The script `homenet_due.py` reads the status files of `homenet-maintenance`, prints at
+  most five lines about what is due and writes nothing. The check module `homenet_no_scan` refuses port scanners
+  (`nmap`, `masscan`, `zmap` and similar, `nc -z` over more than one port) in shell calls of Claude Code.
 
 ## settings
 

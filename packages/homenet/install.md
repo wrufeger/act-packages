@@ -36,14 +36,18 @@ stops the setup at that step with a todo for the owner (`R-homenet-handoff`); th
 
 ## 4. MCP entries and one read test per service
 
-- Assistant: proposes one entry per service the owner uses, from the section "MCP and API catalogue" at the end of this file, with the token as
-  `${<VARIABLE>}` and the address as a DNS name. It writes `.mcp.json` only after the owner's yes (`R-safe-git-metadata`
-  covers that file for workers; the main session writes it), never with a literal token. For each server it lists the
+- Assistant: proposes one entry per service the owner uses, from the section "MCP and API catalogue" at the end of
+  this file, with the token as `${<VARIABLE>}` and the address as a DNS name. It writes `.mcp.json` only after the
+  owner's yes (`R-safe-git-metadata` covers that file for workers; the main session writes it), never with a literal
+  token. For each server it lists the
   server's own tools with the owner and writes the names of tools that only read, per server, into the project file
   `docs/project/homenet/mcp.md` (scaffold below); the installed copy of `topics/homenet-mcp.md` is never edited, it is
   hash-checked against the lock. After the owner's yes it extends the `tools` line of
   `.claude/agents/homenet-reader.md` with those names (a role copy a person edited is never overwritten). The read
-  calls of this step belong to this setup; they are entered in the rights table in step 6.
+  tools chosen for server `homenet-ha` also go, after the owner's yes, into the `tools` line of
+  `.claude/agents/homenet-ha-reader.md` (same rule: a copy a person edited is never overwritten); that role has no
+  shell, so these names are its only way to Home Assistant. The read calls of this step belong to this setup; they are
+  entered in the rights table in step 6.
 
   Scaffold of `docs/project/homenet/mcp.md` (in the project's `language-docs`; the example is invented):
 
@@ -102,12 +106,15 @@ Host <host-alias>
 ```
 # Rights table
 
-One row per system, way and role (`R-homenet-access`). A standing approval is a dated entry for a named action
-class in the column "approved", written only on the owner's word.
+One row per system, way and role (`R-homenet-access`). Role values: `homenet-reader`, `homenet-writer`,
+`homenet-ha-reader`, `homenet-ha-writer`, `orchestrator`. A standing approval is a dated entry for a named action
+class in the column "approved", written only on the owner's word; for `homenet-ha-writer`, the action class
+`integration` (setting up an integration) needs an approval on its own row.
 
 | System | Way | Role | Technically possible | Approved | Backup location | Workstation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | nas.example (example) | SSH | homenet-reader | read and write of the whole system | read commands (2026-01-15, owner) | `<backup-share>/nas.example/` | - |
+| ha.example (example) | MCP | homenet-ha-reader | whatever the token allows | read tools (2026-01-15, owner) | `<backup-share>/ha.example/` | - |
 ```
 
 ## 7. First inventory
@@ -131,16 +138,18 @@ Data as of: <date>
 
 ## 8. Doc structure
 
-- Assistant: writes `docs/project/homenet/README.md` naming `access.md`, `mcp.md` and each area file in one line with its
-  state, and the DNS names with where each applies (`R-homenet-names`). It adds the folder with its README to
-  `docs/README.md` where that file lists folders.
+- Assistant: writes `docs/project/homenet/README.md` naming `access.md`, `mcp.md`, the folder `maintenance/` (status
+  files and dated reports of the skill `homenet-maintenance`; empty until the owner wants a task) and each area file in
+  one line with its state, and the DNS names with where each applies (`R-homenet-names`). It adds the folder with its
+  README to `docs/README.md` where that file lists folders.
 - Owner: reads the README.
 - Check: every file in `docs/project/homenet/` is named in the README; nothing contains a secret, a key or the
   content of an export (`R-homenet-exports`).
 
 ## MCP and API catalogue
 
-Entries in the form of the template's MCP catalogue (`.act/mcp-catalog.md`, "How to read an entry"); `read-tools` stays empty here, the filled lists go into `docs/project/homenet/mcp.md`.
+Entries in the form of the template's MCP catalogue (`.act/mcp-catalog.md`, "How to read an entry"); `read-tools`
+stays empty here, the filled lists go into `docs/project/homenet/mcp.md`.
 
 ## homenet-ha
 

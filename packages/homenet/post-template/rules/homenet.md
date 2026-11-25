@@ -11,13 +11,14 @@ summary: docs/project/homenet/access.md is mandatory; one row per system, way an
 
 The file `docs/project/homenet/access.md` is mandatory; any access that no row covers (system, way and role), reading
 included, is not approved. A row covers one system, one way (`MCP`, `SSH`, `API`, `script`) and one role
-(`homenet-reader`, `homenet-writer`, `orchestrator`). Columns: system, way, role, technically possible (what the
-credential can do), approved (named action classes, each with date and approver), backup location, workstation (only
-when several machines work on the network, else `-`). An entry in "approved" is written only on the owner's word. Each
-action under it still needs a backup to the row's backup location first, a stated way back, a journal line and the
-reader's cross-check. Where a way can do more than is approved, it is used only through a script that knows the approved
-methods alone, never by a direct call with that credential. A critical host may be open to the writer only; everything
-else reads it through MCP.
+(`homenet-reader`, `homenet-writer`, `homenet-ha-reader`, `homenet-ha-writer`, `orchestrator`). Columns: system, way,
+role, technically possible (what the credential can do), approved (named action classes, each with date and approver),
+backup location, workstation (only when several machines work on the network, else `-`). An entry in "approved" is
+written only on the owner's word. Each action under it still needs a backup to the row's backup location first, a
+stated way back, a journal line and the reader's cross-check. Where a way can do more than is approved, it is used only
+through a script that knows the approved methods alone, never by a direct call with that credential. A critical host
+may be open to a writer role only (`homenet-writer`, or `homenet-ha-writer` for Home Assistant); everything else reads
+it through MCP.
 
 ## `R-homenet-never` — The hard core no standing approval covers
 
@@ -28,8 +29,8 @@ internal storage and its databases; deleting anything (removing an integration i
 candidates with reasons). A port scan is never run by the assistant, whatever its form: a script that opens
 connections on its own is a scan too; where one is needed, it is the owner's step (`R-homenet-handoff`). Secret files
 are filled only by the owner and never read. The other items need a dated approval for the exact case every time
-(`R-safe-approval`). Restarts of services or hosts, firmware and core updates, and add-ons or community extensions may be
-approved per system by a dated table entry, otherwise per case. The check module is a second barrier; the rule holds
+(`R-safe-approval`). Restarts of services or hosts, firmware and core updates, and add-ons or community extensions may
+be approved per system by a dated table entry, otherwise per case. The check module is a second barrier; the rule holds
 without it.
 
 ## `R-homenet-ssh` — One bundled connection per step
@@ -46,9 +47,9 @@ hands over a recipe instead (`install.md`).
 
 summary: no rename of a device, entity or host until all consumers are checked; an unchecked point means no rename
 
-Before a device, entity or host is renamed, every consumer is checked: time series and dashboards, scripts and scheduled
-jobs on servers, files visible only over SSH, voice assistants and webhooks, long-term statistics. A point that cannot be
-checked means no rename; ask back.
+Before a device, entity or host is renamed, every consumer is checked: time series and dashboards, scripts and
+scheduled jobs on servers, files visible only over SSH, voice assistants and webhooks, long-term statistics. A point
+that cannot be checked means no rename; ask back.
 
 ## `R-homenet-names` — One DNS name per service
 
