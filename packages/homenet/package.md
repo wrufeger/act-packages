@@ -1,7 +1,7 @@
 ---
 id: homenet
 version: 0.2.0
-requires-template: >=2.6.0
+requires-template: >=2.7.0
 tools: claude-code
 license: MIT
 contains-code: yes
